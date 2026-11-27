@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Attendance System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="{{ url_for('student_dashboard' if session.get('role') == 'student' else 'dashboard') }}">
+                <span class="brand-mark">
+                    <img src="{{ url_for('static', filename='bit-crest.png') }}" alt="BIT logo">
+                </span>
+                <span>
+                    <strong>BIT</strong>
+                    <small>Data Portal</small>
+                </span>
+            </a>
+
+            <nav class="nav-list" aria-label="Primary navigation">
+                {% if session.get('role') == 'student' %}
+                <a class="nav-link {% if request.endpoint == 'student_dashboard' %}active{% endif %}" href="{{ url_for('student_dashboard') }}">
+                    <span class="nav-icon">01</span>
+                    My Attendance
+                </a>
+                {% else %}
+                <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">
+                    <span class="nav-icon">01</span>
+                    Dashboard
+                </a>
+                {% if session.get('role') == 'admin' %}
+                <a class="nav-link {% if request.endpoint == 'students' %}active{% endif %}" href="{{ url_for('students') }}">
+                    <span class="nav-icon">02</span>
+                    Students
+                </a>
+                <a class="nav-link {% if request.endpoint == 'subjects' %}active{% endif %}" href="{{ url_for('subjects') }}">
+                    <span class="nav-icon">03</span>
+                    Subjects
+                </a>
+                <a class="nav-link {% if request.endpoint == 'faculty' %}active{% endif %}" href="{{ url_for('faculty') }}">
+                    <span class="nav-icon">04</span>
+                    Faculty
+                </a>
+                {% endif %}
+                <a class="nav-link {% if request.endpoint == 'attendance' %}active{% endif %}" href="{{ url_for('attendance') }}">
+                    <span class="nav-icon">05</span>
+                    Attendance
+                </a>
+                <a class="nav-link {% if request.endpoint == 'reports' %}active{% endif %}" href="{{ url_for('reports') }}">
+                    <span class="nav-icon">06</span>
+                    Reports
+                </a>
+                {% endif %}
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div>
+                    <p class="eyebrow">{% block eyebrow %}Attendance Management{% endblock %}</p>
+                    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+                </div>
+                <a class="ghost-button" href="{{ url_for('logout') }}">Sign out</a>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <div class="flash-stack" aria-live="polite">
+                    {% for category, message in messages %}
+                    <p class="alert {{ 'success' if category == 'success' else 'danger' }}" role="status">{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

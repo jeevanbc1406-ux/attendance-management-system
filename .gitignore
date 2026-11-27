@@ -1,0 +1,32 @@
+# Local secrets and environment overrides
+.env
+.env.*
+!.env.example
+
+# Generated credentials and data exports
+*.csv
+*.sql
+!database.sql
+!seed_20_students.sql
+
+# Runtime logs
+*.log
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Local database files and backups
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.bak
+*.backup
+
+# Empty local scratch artifact
+/A

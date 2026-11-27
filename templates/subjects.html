@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}Subjects | BIT Data Portal{% endblock %}
+{% block eyebrow %}Subject Records{% endblock %}
+{% block page_title %}Subjects{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">New entry</p>
+            <h2>Add Subject</h2>
+        </div>
+    </div>
+
+    <form method="POST" class="form-grid">
+        <label>
+            Subject Name
+            <input type="text" name="subject_name" placeholder="Subject title" required>
+        </label>
+        <label>
+            Faculty
+            <select name="faculty_id" required>
+                {% for member in faculty %}
+                <option value="{{ member[0] }}">{{ member[1] }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <button type="submit">Add Subject</button>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">Catalog</p>
+            <h2>Subject List</h2>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Subject Name</th>
+                    <th>Faculty</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in subjects %}
+                <tr>
+                    <td>{{ subject[0] }}</td>
+                    <td>{{ subject[1] }}</td>
+                    <td>{{ subject[2] or 'Not assigned' }}</td>
+                    <td>{{ subject[3] or 'Not assigned' }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="empty-state">No subjects added yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

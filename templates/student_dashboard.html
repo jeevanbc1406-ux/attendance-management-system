@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+
+{% block title %}My Attendance | BIT Data Portal{% endblock %}
+{% block eyebrow %}Student Portal{% endblock %}
+{% block page_title %}My Attendance{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">Profile</p>
+            <h2>{{ student[1] }}</h2>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div>
+            <span>Student ID</span>
+            <strong>{{ student[0] }}</strong>
+        </div>
+        <div>
+            <span>Department</span>
+            <strong>{{ student[3] or 'Not assigned' }}</strong>
+        </div>
+        <div>
+            <span>Semester</span>
+            <strong>Sem {{ student[2] }}</strong>
+        </div>
+        <div>
+            <span>Parent Phone</span>
+            <strong>{{ student[6] or 'Not added' }}</strong>
+        </div>
+        <div>
+            <span>Parent Name</span>
+            <strong>{{ student[5] or 'Not added' }}</strong>
+        </div>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">Attendance Summary</p>
+            <h2>Subject Percentages</h2>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Total Classes</th>
+                    <th>Present</th>
+                    <th>Attendance Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td>{{ report[0] }}</td>
+                    <td>{{ report[1] }}</td>
+                    <td>{{ report[2] }}</td>
+                    <td>
+                        <span class="status-pill {% if report[3] < 75 %}danger{% else %}success{% endif %}">
+                            {{ "%.2f"|format(report[3]) }}%
+                        </span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="empty-state">No attendance records available yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">Parent Alerts</p>
+            <h2>Below 75% Warnings</h2>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Percentage</th>
+                    <th>Parent Name</th>
+                    <th>Parent Phone</th>
+                    <th>Message</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for warning in warnings %}
+                <tr>
+                    <td>{{ warning[0] }}</td>
+                    <td><span class="status-pill danger">{{ "%.2f"|format(warning[1]) }}%</span></td>
+                    <td>{{ warning[2] or 'Not added' }}</td>
+                    <td>{{ warning[3] or 'Not added' }}</td>
+                    <td>{{ warning[4] }}</td>
+                    <td>
+                        {% if warning[3] %}
+                        <a class="ghost-button table-action" href="sms:{{ warning[3] }}?body={{ warning[4]|urlencode }}">Send SMS</a>
+                        {% else %}
+                        <span class="status-pill neutral">Add parent phone</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="empty-state">No attendance warnings for your subjects.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

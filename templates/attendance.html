@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}Attendance | BIT Data Portal{% endblock %}
+{% block eyebrow %}Daily Attendance{% endblock %}
+{% block page_title %}Mark Attendance{% endblock %}
+
+{% block content %}
+<section class="panel compact-panel">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">Class session</p>
+            <h2>Attendance Entry</h2>
+            <p class="panel-hint">{% if session.get('role') == 'faculty' %}Choose a student and one of your assigned subjects.{% else %}Choose a student, subject, date, and status.{% endif %}</p>
+        </div>
+    </div>
+
+    <form method="POST" class="form-grid attendance-form">
+        <label>
+            Student
+            <select name="student_id" required>
+                {% for student in students %}
+                <option value="{{ student[0] }}">{{ student[1] }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            Subject
+            <select name="subject_id" required>
+                {% for subject in subjects %}
+                <option value="{{ subject[0] }}">{{ subject[1] }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            Date
+            <input type="date" name="date" required>
+        </label>
+        <label>
+            Status
+            <select name="status" required>
+                <option>Present</option>
+                <option>Absent</option>
+            </select>
+        </label>
+        <button type="submit">Save Attendance</button>
+    </form>
+</section>
+{% endblock %}

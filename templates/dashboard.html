@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard | BIT Data Portal{% endblock %}
+{% block eyebrow %}Overview{% endblock %}
+{% block page_title %}Attendance Dashboard{% endblock %}
+
+{% block content %}
+<section class="dashboard-grid">
+    {% if session.get('role') == 'admin' %}
+    <a class="action-card accent-blue" href="{{ url_for('students') }}">
+        <span class="card-kicker">Records</span>
+        <strong>Students</strong>
+        <p>Add and review student profiles by department and semester.</p>
+    </a>
+    <a class="action-card accent-green" href="{{ url_for('subjects') }}">
+        <span class="card-kicker">Academics</span>
+        <strong>Subjects</strong>
+        <p>Create subjects and connect them with faculty.</p>
+    </a>
+    <a class="action-card accent-teal" href="{{ url_for('faculty') }}">
+        <span class="card-kicker">Staff</span>
+        <strong>Faculty</strong>
+        <p>Add teachers before assigning subjects to their classes.</p>
+    </a>
+    {% endif %}
+    <a class="action-card accent-amber" href="{{ url_for('attendance') }}">
+        <span class="card-kicker">Daily work</span>
+        <strong>Attendance</strong>
+        <p>Mark present or absent status for each class session.</p>
+    </a>
+    <a class="action-card accent-rose" href="{{ url_for('reports') }}">
+        <span class="card-kicker">Insights</span>
+        <strong>Reports</strong>
+        <p>{% if session.get('role') == 'admin' %}Check attendance summaries across all subjects.{% else %}Check summaries for your assigned subjects.{% endif %}</p>
+    </a>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">Quick flow</p>
+            <h2>Today at a glance</h2>
+        </div>
+    </div>
+    <div class="timeline">
+        {% if session.get('role') == 'admin' %}
+        <div class="timeline-item">
+            <span>1</span>
+            <p>Add new students when admissions or transfers are updated.</p>
+        </div>
+        <div class="timeline-item">
+            <span>2</span>
+            <p>Keep subjects aligned with current faculty assignments.</p>
+        </div>
+        <div class="timeline-item">
+            <span>3</span>
+            <p>Record attendance and review percentages from reports.</p>
+        </div>
+        {% else %}
+        <div class="timeline-item">
+            <span>1</span>
+            <p>Record attendance for your assigned subjects and review their reports.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

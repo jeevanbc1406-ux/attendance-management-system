@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block title %}Reports | BIT Data Portal{% endblock %}
+{% block eyebrow %}Attendance Insights{% endblock %}
+{% block page_title %}Reports{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">Attendance Summary</p>
+            <h2>Attendance Percentages</h2>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Subject</th>
+                    <th>Attendance Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td>{{ report[0] }}</td>
+                    <td>{{ report[1] }}</td>
+                    <td>{{ report[2] }}</td>
+                    <td>
+                        <span class="status-pill success">{{ "%.2f"|format(report[3]) }}%</span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="empty-state">No attendance records available yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">Trigger Output</p>
+            <h2>Attendance Warnings</h2>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Warning ID</th>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Subject</th>
+                    <th>Parent Name</th>
+                    <th>Parent Phone</th>
+                    <th>Percentage</th>
+                    <th>Message</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for warning in warnings %}
+                <tr>
+                    <td>{{ warning[0] }}</td>
+                    <td>{{ warning[1] }}</td>
+                    <td>{{ warning[2] }}</td>
+                    <td>{{ warning[3] }}</td>
+                    <td>{{ warning[4] or 'Not added' }}</td>
+                    <td>{{ warning[5] or 'Not added' }}</td>
+                    <td><span class="status-pill danger">{{ "%.2f"|format(warning[6]) }}%</span></td>
+                    <td>{{ warning[7] }}</td>
+                    <td>
+                        {% if warning[5] %}
+                        <a class="ghost-button table-action" href="sms:{{ warning[5] }}?body={{ warning[7]|urlencode }}">Send SMS</a>
+                        {% else %}
+                        <span class="status-pill neutral">Add parent phone</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="9" class="empty-state">No attendance warnings generated yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
